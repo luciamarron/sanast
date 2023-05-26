@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "438747715019",
+    "project_id": "sanast-10cd0",
+    "storage_bucket": "sanast-10cd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438747715019:android:4eff9741448ec1cbe7524e",
+        "android_client_info": {
+          "package_name": "com.example.sanast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438747715019-nscf9jscnkdlf3npnisdoliu3ia3ibsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUJ12uXxCt5_valUBZUn8Jo9iszlj81-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438747715019-nscf9jscnkdlf3npnisdoliu3ia3ibsp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

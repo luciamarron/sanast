@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app"
+    tools:context=".Registro">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/sanast"
+                android:contentDescription="@string/ayuda"
+                android:src="@drawable/ayuda" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/logo">
+
+            </ImageView>
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/nombre"
+            android:layout_width="312dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="59dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="43dp"
+            android:background="@drawable/shapedrawable"
+            android:hint="@string/nombre"
+            android:fontFamily="@font/kanit_regular"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="#818181"
+            android:textColorHint="@color/gris"/>
+
+        <EditText
+            android:id="@+id/apellidos"
+            android:layout_width="312dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="43dp"
+            android:background="@drawable/shapedrawable"
+            android:hint="@string/apellido"
+            android:fontFamily="@font/kanit_regular"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="#818181"
+            android:textColorHint="@color/gris"/>
+
+        <EditText
+            android:id="@+id/dni"
+            android:layout_width="312dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="43dp"
+            android:background="@drawable/shapedrawable"
+            android:hint="@string/dni"
+            android:fontFamily="@font/kanit_regular"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textColor="#818181"
+            android:textColorHint="@color/gris"/>
+
+        <EditText
+            android:id="@+id/telefono"
+            android:layout_width="312dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="43dp"
+            android:background="@drawable/shapedrawable"
+            android:hint="@string/telefono"
+            android:fontFamily="@font/kanit_regular"
+            android:inputType="phone"
+            android:textAlignment="center"
+            android:textColor="#818181"
+            android:textColorHint="@color/gris"/>
+
+        <EditText
+            android:id="@+id/contr"
+            android:layout_width="312dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="49dp"
+            android:layout_marginBottom="43dp"
+            android:background="@drawable/shapedrawable"
+            android:hint="@string/contraseña"
+            android:fontFamily="@font/kanit_regular"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textColor="#818181"
+            android:textColorHint="@color/gris"/>
+
+        <Button
+            android:id="@+id/entrar"
+            android:layout_width="128dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="230dp"
+            android:gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="49dp"
+            android:backgroundTint="@color/sanast"
+            app:cornerRadius="25dp"
+            android:text="SIGUIENTE"
+            android:textColor="@color/black"
+            android:fontFamily="@font/kanit_regular" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
