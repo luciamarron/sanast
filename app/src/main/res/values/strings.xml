@@ -2,10 +2,24 @@
     <string name="app_name">Sanast</string>
     <string name="pass">Contraseña</string>
     <string name="usuario">Usuario</string>
-    <string name="nombre">NOMBRE</string>
-    <string name="apellido">APELLIDOS</string>
+    <string name="nombre">NOMBRE COMPLETO</string>
     <string name="dni">DNI</string>
-    <string name="telefono">TELÉFONO</string>
+    <string name="correo">CORREO ELECTRÓNICO</string>
     <string name="contraseña">CONTRASEÑA</string>
     <string name="ayuda">ayuda</string>
+    <string name="reservar">RESERVAR</string>
+    <string name="elegir">ELIJA FECHA Y TIPO DE CONSULTA</string>
+    <string name="logo">Logo</string>
+    <string name="telefonica">CONSULTA TELEFÓNICA</string>
+    <string name="presencial">CONSULTA PRESENCIAL</string>
+    <string name="centrosalud">SELECCIONE SU CENTRO DE SALUD</string>
+    <string name="registrar">REGISTRAR</string>
+    <string name="entrar">ENTRAR</string>
+    <string name="menu">ELIJA UNA OPCIÓN</string>
+    <string name="inicio">INICIAR SESIÓN</string>
+    <string name="registro">REGISTRO</string>
+    <string name="medicacion">MEDICACIÓN</string>
+    <string name="citas">PRÓXIMAS CITAS</string>
+    <string name="siguiente">SIGUIENTE</string>
+    <string name="volver">VOLVER</string>
 </resources>

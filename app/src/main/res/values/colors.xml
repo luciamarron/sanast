@@ -11,4 +11,6 @@
     <color name="app">#3E5C12</color>
     <color name="gris">#686766</color>
     <color name="sanast">#7CB212</color>
+    <color name="grisclaro">#737373</color>
+    <color name="custom_text_color">#FF000000</color>
 </resources>

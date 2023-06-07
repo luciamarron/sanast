@@ -4,6 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Medicacion">
+    tools:context=".Medicacion"
+    android:background="@drawable/fondo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:id="@+id/usuariomenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/kanit_regular"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/white"
+                android:textSize="22sp">
+
+            </TextView>
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/logo">
+
+            </ImageView>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/kanit_regular"
+            android:gravity="center"
+            android:text="@string/medicacion"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <ListView
+            android:id="@+id/listMedicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="120dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shapedrawable2" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

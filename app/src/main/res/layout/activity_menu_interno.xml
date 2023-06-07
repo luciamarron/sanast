@@ -65,7 +65,7 @@
                 <LinearLayout
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="35dp"
+                    android:padding="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center">
@@ -106,7 +106,7 @@
                 <LinearLayout
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="35dp"
+                    android:padding="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center">
@@ -147,7 +147,7 @@
                 <LinearLayout
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="35dp"
+                    android:padding="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center">
@@ -177,6 +177,38 @@
             </androidx.cardview.widget.CardView>
 
         </GridLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="7dp"
+            android:backgroundTint="@color/sanast"
+            android:contentDescription=""
+            android:src="@drawable/ayuda" />
+
+            <Button
+                android:id="@+id/llamar"
+                android:layout_width="154dp"
+                android:layout_height="54dp"
+                android:backgroundTint="@color/sanast"
+                app:cornerRadius="25dp"
+                android:text="TELÉFONO"
+                android:textColor="@color/black"
+                android:fontFamily="@font/kanit_regular"
+                android:drawableLeft="@drawable/telefono"
+                android:drawablePadding="8dp"
+                android:scaleType="fitStart"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

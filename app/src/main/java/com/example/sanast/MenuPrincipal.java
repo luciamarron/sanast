@@ -24,14 +24,16 @@ public class MenuPrincipal extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Registro.class);
+                Intent intent = new Intent(getApplicationContext(), CentroSalud.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

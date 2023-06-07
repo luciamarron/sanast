@@ -66,21 +66,18 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void login(String telefono, String contraseña){
+    public void login(String correo, String contrasena){
         mAuth = FirebaseAuth.getInstance();
-        AuthCredential credential = PhoneAuthProvider.getCredential(telefono, contraseña);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(correo, contrasena).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                   FirebaseUser user = task.getResult().getUser();
-                    Toast.makeText(Login.this, "Authentication succesful.",
-                            Toast.LENGTH_SHORT).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
                     Intent intent = new Intent(Login.this, MenuInterno.class);
                     startActivity(intent);
-
+                    finish();
                 } else {
-                    Toast.makeText(Login.this, "Authentication failed.",
+                    Toast.makeText(Login.this, "USUARIO O CONTRASEÑA INCORRECTOS",
                             Toast.LENGTH_SHORT).show();
                 }
             }
