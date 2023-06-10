@@ -7,8 +7,6 @@ public class Usuario {
     public String contraseña;
     public String centro_de_salud;
 
-
-
     public Usuario (){
 
     }

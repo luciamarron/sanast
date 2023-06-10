@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,13 +34,26 @@ public class CentroSalud extends AppCompatActivity {
     private String eleccionCentroSalud;
     private static final int REQUEST_ELECCION_CENTRO_SALUD = 1;
     private Usuario usuario;
+    FloatingActionButton botonAudio;
+    MediaPlayer mediaplayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_centro_salud);
 
+        botonAudio = findViewById(R.id.fab);
+        mediaplayer = MediaPlayer.create(this, R.raw.centrosalud);
         lista = (ListView) findViewById(R.id.listView);
+
+        //BOTON ?
+
+        botonAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reproducirAudio();
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
         lista.setAdapter(adapter);
@@ -90,5 +105,31 @@ public class CentroSalud extends AppCompatActivity {
             usuario.setCentro_de_salud(eleccionCentroSalud);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaplayer != null) {
+            mediaplayer.release();
+            mediaplayer = null;
+        }
+    }
+
+    private void reproducirAudio() {
+        // Desactivar el botón de reproducción
+        botonAudio.setEnabled(false);
+
+        // Iniciar la reproducción del audio
+        mediaplayer = MediaPlayer.create(this, R.raw.centrosalud);
+        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+                botonAudio.setEnabled(true);
+            }
+        });
+        mediaplayer.start();
+    }
+
 
 }

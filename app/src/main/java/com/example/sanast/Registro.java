@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +29,8 @@ public class Registro extends AppCompatActivity {
     private FirebaseAuth mAuth;
     Usuario usuario = new Usuario();
     private String eleccionCentroSalud;
+    FloatingActionButton botonAudio;
+    MediaPlayer mediaplayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +41,20 @@ public class Registro extends AppCompatActivity {
         dni = (EditText) findViewById(R.id.dni);
         correo = (EditText) findViewById(R.id.correo);
         contraseña = (EditText) findViewById(R.id.contr);
+        mediaplayer = MediaPlayer.create(this, R.raw.registro);
+
+        botonAudio = findViewById(R.id.fab);
 
         eleccionCentroSalud = getIntent().getStringExtra("centroSalud");
+
+        //BOTON ?
+        botonAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reproducirAudio();
+            }
+        });
+
 
         //REGISTRO
         mAuth = FirebaseAuth.getInstance();
@@ -57,7 +73,10 @@ public class Registro extends AppCompatActivity {
                 // Verificar que los campos no estén vacíos
                 if (nombreValor.isEmpty() || dniValor.isEmpty() ||
                         correoValor.isEmpty() || contraseñaValor.isEmpty()) {
-                    Toast.makeText(Registro.this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
+                    mediaplayer = MediaPlayer.create(Registro.this, R.raw.campos);
+                    mediaplayer.start();
+                    Toast.makeText(Registro.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     //ASIGNACIÓN DE VALORES DE USUARIO
                     usuario.setNombre(nombreValor);
@@ -115,5 +134,31 @@ public class Registro extends AppCompatActivity {
         Matcher marcher = pattern.matcher(correo);
         return marcher.matches();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaplayer != null) {
+            mediaplayer.release();
+            mediaplayer = null;
+        }
+    }
+
+    private void reproducirAudio() {
+        // Desactivar el botón de reproducción
+        botonAudio.setEnabled(false);
+
+        // Iniciar la reproducción del audio
+        mediaplayer = MediaPlayer.create(this, R.raw.registro);
+        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+                botonAudio.setEnabled(true);
+            }
+        });
+        mediaplayer.start();
+    }
+
 
 }

@@ -33,7 +33,6 @@ public class MenuPrincipal extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CentroSalud.class);
                 startActivity(intent);
-                finish();
             }
         });
     }

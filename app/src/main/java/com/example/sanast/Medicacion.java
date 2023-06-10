@@ -3,7 +3,13 @@ package com.example.sanast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,10 +19,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Medicacion extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     TextView nombre;
+    Button volver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +34,7 @@ public class Medicacion extends AppCompatActivity {
         setContentView(R.layout.activity_medicacion);
 
         nombre = findViewById(R.id.usuariomenu);
+        volver = findViewById(R.id.volver);
 
         //RECUPERACIÓN DE NOMBRE DE USUARIO
         mAuth = FirebaseAuth.getInstance();
@@ -50,6 +61,47 @@ public class Medicacion extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        //RECUPERACIÓN DE MEDICACIÓN
+        String userCita = mAuth.getCurrentUser().getUid();
+        DatabaseReference medicacionRef = FirebaseDatabase.getInstance().getReference("medicacion")
+                .child(userCita);
+
+        ListView listViewCitas = findViewById(R.id.listMedicacion);
+
+
+
+        medicacionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> medicacionList = new ArrayList<>();
+                for (DataSnapshot medicacionSnapshot : dataSnapshot.getChildren()) {
+                    String medicacion = medicacionSnapshot.child("medicacion").getValue(String.class);
+                    String dosis = medicacionSnapshot.child("dosis").getValue(String.class);
+                    String medicacionUsu = medicacion + " - " + dosis;
+                    medicacionList.add(medicacionUsu);
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                        android.R.layout.simple_list_item_1, medicacionList);
+                listViewCitas.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Maneja el error en caso de que ocurra
+            }
+        });
+
+
+        volver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Medicacion.this, MenuInterno.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

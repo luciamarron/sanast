@@ -22,4 +22,8 @@
     <string name="citas">PRÓXIMAS CITAS</string>
     <string name="siguiente">SIGUIENTE</string>
     <string name="volver">VOLVER</string>
+    <string name="dosis">DOSIS</string>
+    <string name="usumed">SELECCIONE EL USUARIO AL QUE ASIGNARLE MEDICACIÓN</string>
+    <string name="usumed2">ASIGNE LA MEDICACIÓN Y LA DOSIS AL PACIENTE</string>
+    <string name="asignar">ASIGNAR</string>
 </resources>

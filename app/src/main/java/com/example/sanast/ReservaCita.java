@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,8 @@ public class ReservaCita extends AppCompatActivity {
     TextView nombre;
     CalendarView calendarView;
     String fechaSeleccionada;
+    FloatingActionButton botonAudio;
+    MediaPlayer mediaplayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,16 @@ public class ReservaCita extends AppCompatActivity {
 
         nombre = findViewById(R.id.usuariomenu);
         calendarView = findViewById(R.id.calendarView);
+        mediaplayer = MediaPlayer.create(this, R.raw.citas);
+        botonAudio = findViewById(R.id.fab);
+
+        //BOTON ?
+        botonAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reproducirAudio();
+            }
+        });
 
         //RECUPERACIÓN DE NOMBRE DE USUARIO
         mAuth = FirebaseAuth.getInstance();
@@ -169,6 +183,31 @@ public class ReservaCita extends AppCompatActivity {
                 })
                 .setCancelable(false)
                 .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaplayer != null) {
+            mediaplayer.release();
+            mediaplayer = null;
+        }
+    }
+
+    private void reproducirAudio() {
+        // Desactivar el botón de reproducción
+        botonAudio.setEnabled(false);
+
+        // Iniciar la reproducción del audio
+        mediaplayer = MediaPlayer.create(this, R.raw.citas);
+        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+                botonAudio.setEnabled(true);
+            }
+        });
+        mediaplayer.start();
     }
 
 }

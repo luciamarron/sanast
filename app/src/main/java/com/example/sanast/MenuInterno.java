@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +29,8 @@ public class MenuInterno extends AppCompatActivity {
     private String eleccionCentroSalud;
     Button medicacion, prox_cita, cita;
     TextView nombre;
+    FloatingActionButton botonAudio;
+    MediaPlayer mediaplayer;
 
     //BOTÓN ATRAS
     @Override
@@ -65,7 +69,18 @@ public class MenuInterno extends AppCompatActivity {
         medicacion = findViewById(R.id.medicacion);
         prox_cita = findViewById(R.id.prox_citas);
         nombre = findViewById(R.id.usuariomenu);
+        botonAudio = findViewById(R.id.fab);
+        mediaplayer = MediaPlayer.create(this, R.raw.menu);
 
+        //BOTON ?
+        botonAudio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reproducirAudio();
+            }
+        });
+
+        //MENU
         cita.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ReservaCita.class);
             startActivity(intent);
@@ -109,6 +124,30 @@ public class MenuInterno extends AppCompatActivity {
             }
         });
 
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaplayer != null) {
+            mediaplayer.release();
+            mediaplayer = null;
+        }
+    }
+
+    private void reproducirAudio() {
+        // Desactivar el botón de reproducción
+        botonAudio.setEnabled(false);
+
+        // Iniciar la reproducción del audio
+        mediaplayer = MediaPlayer.create(this, R.raw.menu);
+        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+                botonAudio.setEnabled(true);
+            }
+        });
+        mediaplayer.start();
     }
 }
