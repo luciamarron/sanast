@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MedicacionAdmin extends AppCompatActivity {
 
@@ -82,9 +83,11 @@ public class MedicacionAdmin extends AppCompatActivity {
                 eleccionUsuario = usuarioSeleccionado;
                 Toast.makeText(MedicacionAdmin.this, "Se hizo clic en: " + usuarioSeleccionado, Toast.LENGTH_SHORT).show();
 
+                String identificadorAleatorio = UUID.randomUUID().toString();
+
                 // Crear un intent para iniciar la actividad de registro
                 Intent intent = new Intent(MedicacionAdmin.this, MedicacionAdmin2.class);
-                intent.putExtra("usuarioMed", usuarioSeleccionado);
+                intent.putExtra("usuarioMed", identificadorAleatorio);
                 startActivityForResult(intent, REQUEST_ELECCION_USUARIO);
             }
         });

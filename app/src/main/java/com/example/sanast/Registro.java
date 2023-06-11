@@ -105,7 +105,7 @@ public class Registro extends AppCompatActivity {
                                         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getEmail().equals(correo)) {
                                             Toast.makeText(Registro.this, "El usuario ya está registrado", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            if (password.length() < 6) {
+                                            if (password.length() == 6) {
                                                 Toast.makeText(Registro.this, "La contraseña debe tener 6 caracteres como mínimo", Toast.LENGTH_SHORT).show();
                                             }
                                             if (!correoValido(correo)) {

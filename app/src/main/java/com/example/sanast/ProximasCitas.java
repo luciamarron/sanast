@@ -89,7 +89,6 @@ public class ProximasCitas extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Maneja el error en caso de que ocurra
             }
         });
 

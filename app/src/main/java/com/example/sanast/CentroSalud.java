@@ -75,7 +75,7 @@ public class CentroSalud extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Manejar el error si es necesario
+
             }
         });
 

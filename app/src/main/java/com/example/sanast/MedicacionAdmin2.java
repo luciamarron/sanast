@@ -71,8 +71,6 @@ public class MedicacionAdmin2 extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                // Redirige al usuario a la pantalla para agregar más medicaciones
-                // Por ejemplo, puedes usar un Intent para iniciar otra actividad
                 Intent intent = new Intent(MedicacionAdmin2.this, MedicacionAdmin.class);
                 intent.putExtra("usuarioMed", eleccionUsuario);
                 startActivity(intent);
@@ -82,10 +80,7 @@ public class MedicacionAdmin2 extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                // Redirige al usuario a otra pantalla
-                // Por ejemplo, puedes usar un Intent para iniciar otra actividad
-                Intent intent = new Intent(MedicacionAdmin2.this, MenuPrincipal.class);
-                startActivity(intent);
+                finishAffinity();
             }
         });
         builder.show();

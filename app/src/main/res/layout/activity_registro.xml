@@ -120,6 +120,7 @@
             android:gravity="center"
             android:text="@string/registrar"
             android:textColor="@color/black"
+            android:textStyle="bold"
             app:cornerRadius="25dp" />
 
 

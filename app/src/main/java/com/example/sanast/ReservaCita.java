@@ -39,6 +39,7 @@ public class ReservaCita extends AppCompatActivity {
     String fechaSeleccionada;
     FloatingActionButton botonAudio;
     MediaPlayer mediaplayer;
+    RadioButton presencial, telefonica;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,8 @@ public class ReservaCita extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         mediaplayer = MediaPlayer.create(this, R.raw.citas);
         botonAudio = findViewById(R.id.fab);
+        presencial = findViewById(R.id.consultaPresencial);
+        telefonica = findViewById(R.id.consultaTelefonica);
 
         //BOTON ?
         botonAudio.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +107,8 @@ public class ReservaCita extends AppCompatActivity {
             public void onClick(View v) {
                 if (fechaSeleccionada == null) {
                     Toast.makeText(getApplicationContext(), "Por favor, seleccione una fecha", Toast.LENGTH_SHORT).show();
+                }else if (!presencial.isChecked() && !telefonica.isChecked()){
+                    Toast.makeText(getApplicationContext(), "Por favor, seleccione el tipo de consulta", Toast.LENGTH_SHORT).show();
                 } else {
                     String tipoCita = obtenerTipoCitaDelRadioButton();
 
@@ -142,9 +147,6 @@ public class ReservaCita extends AppCompatActivity {
         CalendarView calendarView = findViewById(R.id.calendarView);
         long fechaSeleccionadaMillis = calendarView.getDate();
         Date fechaSeleccionada = new Date(fechaSeleccionadaMillis);
-
-        Log.d("Fecha", "Fecha seleccionada en milisegundos: " + fechaSeleccionadaMillis);
-        Log.d("Fecha", "Fecha seleccionada como objeto Date: " + fechaSeleccionada);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return dateFormat.format(fechaSeleccionada);

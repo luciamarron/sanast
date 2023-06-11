@@ -71,8 +71,6 @@ public class Medicacion extends AppCompatActivity {
 
         ListView listViewCitas = findViewById(R.id.listMedicacion);
 
-
-
         medicacionRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

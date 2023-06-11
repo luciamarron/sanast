@@ -92,6 +92,7 @@
         android:backgroundTint="@color/sanast"
         app:cornerRadius="25dp"
         android:text="@string/entrar"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:fontFamily="@font/kanit_regular"
         app:layout_constraintEnd_toEndOf="parent"
