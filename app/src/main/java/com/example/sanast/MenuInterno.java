@@ -1,27 +1,23 @@
 package com.example.sanast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
-
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class MenuInterno extends AppCompatActivity {
@@ -31,7 +27,6 @@ public class MenuInterno extends AppCompatActivity {
     TextView nombre;
     FloatingActionButton botonAudio;
     MediaPlayer mediaplayer;
-    private static final int REQUEST_PHONE_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +39,12 @@ public class MenuInterno extends AppCompatActivity {
         nombre = findViewById(R.id.usuariomenu);
         botonAudio = findViewById(R.id.fab);
         mediaplayer = MediaPlayer.create(this, R.raw.menu);
+        llamarCentroSalud = findViewById(R.id.llamada);
 
         //BOTON ?
-        botonAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reproducirAudio();
-            }
-        });
+        botonAudio.setOnClickListener(v -> reproducirAudio());
 
-        //MENU
+        //MENÚ
         cita.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), ReservaCita.class);
             startActivity(intent);
@@ -71,22 +62,19 @@ public class MenuInterno extends AppCompatActivity {
 
         //RECUPERACIÓN DE NOMBRE DE USUARIO
         mAuth = FirebaseAuth.getInstance();
-        // Obtén la referencia de la base de datos
         DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference("usuarios");
 
-        // Obtén el ID del usuario actualmente autenticado
         String userId = mAuth.getCurrentUser().getUid();
 
-        // Escucha los cambios en los datos del usuario actual
         usuariosRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Verifica si existen datos para el usuario actual
+
                 if (dataSnapshot.exists()) {
-                    // Obtiene el nombre del usuario desde la base de datos
+
                     String nombreUsuario = dataSnapshot.child("nombre").getValue(String.class).toUpperCase();
 
-                    // Asigna el nombre del usuario al TextView
+                    // Asignar el nombre del usuario al TextView
                     nombre.setText(nombreUsuario);
 
                     // Comprobar la longitud del nombre
@@ -107,6 +95,58 @@ public class MenuInterno extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+
+        //BOTÓN TELÉFONO
+        llamarCentroSalud.setOnClickListener(view -> {
+            String userId1 = mAuth.getCurrentUser().getUid(); // Obtén el ID del usuario loggeado
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("usuarios").child(userId1);
+
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String nombreCentroSalud = dataSnapshot.child("centro_de_salud").getValue(String.class);
+                        if (nombreCentroSalud != null) {
+                            DatabaseReference centroSaludRef = FirebaseDatabase.getInstance().getReference().child("centros_de_salud");
+
+                            Query query = centroSaludRef.orderByChild("nombre").equalTo(nombreCentroSalud);
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        DataSnapshot centroSaludSnapshot = dataSnapshot.getChildren().iterator().next();
+                                        String telefono = centroSaludSnapshot.child("telefono").getValue(String.class);
+                                        if (telefono != null && !telefono.isEmpty()) {
+                                            Uri number = Uri.parse("tel:" + telefono);
+                                            Intent dial = new Intent(Intent.ACTION_DIAL, number);
+                                            startActivity(dial);
+                                        } else {
+                                            Toast.makeText(MenuInterno.this, "El centro de salud no tiene un número de teléfono válido", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(MenuInterno.this, "El centro de salud no existe", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        } else {
+                            Toast.makeText(MenuInterno.this, "El usuario no tiene asignado un centro de salud", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(MenuInterno.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         });
 
     }
@@ -137,15 +177,11 @@ public class MenuInterno extends AppCompatActivity {
     private void reproducirAudio() {
         // Desactivar el botón de reproducción
         botonAudio.setEnabled(false);
-
         // Iniciar la reproducción del audio
         mediaplayer = MediaPlayer.create(this, R.raw.menu);
-        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
-                botonAudio.setEnabled(true);
-            }
+        mediaplayer.setOnCompletionListener(mp -> {
+            // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+            botonAudio.setEnabled(true);
         });
         mediaplayer.start();
     }

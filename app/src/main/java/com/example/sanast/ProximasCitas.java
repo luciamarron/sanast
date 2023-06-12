@@ -44,24 +44,21 @@ public class ProximasCitas extends AppCompatActivity {
         nombre = findViewById(R.id.usuariomenu);
         volver = findViewById(R.id.volver);
 
+
         //RECUPERACIÓN DE NOMBRE DE USUARIO
         mAuth = FirebaseAuth.getInstance();
-        // Obtén la referencia de la base de datos
         DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference("usuarios");
-
-        // Obtén el ID del usuario actualmente autenticado
         String userId = mAuth.getCurrentUser().getUid();
 
-        // Escucha los cambios en los datos del usuario actual
         usuariosRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Verifica si existen datos para el usuario actual
+
                 if (dataSnapshot.exists()) {
-                    // Obtiene el nombre del usuario desde la base de datos
+
                     String nombreUsuario = dataSnapshot.child("nombre").getValue(String.class).toUpperCase();
 
-                    // Asigna el nombre del usuario al TextView
+                    // Asignar el nombre del usuario al TextView
                     nombre.setText(nombreUsuario);
 
                     // Comprobar la longitud del nombre
@@ -88,7 +85,7 @@ public class ProximasCitas extends AppCompatActivity {
         String userCita = mAuth.getCurrentUser().getUid();
         DatabaseReference citasRef = FirebaseDatabase.getInstance().getReference("citas").child(userCita);
 
-        // Obtener la referencia al ListView en tu layout de actividad
+        // Obtener la referencia al ListView
         ListView listViewCitas = findViewById(R.id.listMedicacion);
 
         // Mostrar las citas del usuario
@@ -130,13 +127,10 @@ public class ProximasCitas extends AppCompatActivity {
             }
         });
 
-        volver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProximasCitas.this, MenuInterno.class);
-                startActivity(intent);
-                finish();
-            }
+        volver.setOnClickListener(v -> {
+            Intent intent = new Intent(ProximasCitas.this, MenuInterno.class);
+            startActivity(intent);
+            finish();
         });
 
     }

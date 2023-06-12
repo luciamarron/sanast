@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 public class MenuPrincipal extends AppCompatActivity {
@@ -16,24 +15,18 @@ public class MenuPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
 
-        sesion = (Button) findViewById(R.id.sesion);
-        registro = (Button) findViewById(R.id.registro);
+        sesion = findViewById(R.id.sesion);
+        registro = findViewById(R.id.registro);
 
-        sesion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                finish();
-            }
+        sesion.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), Login.class);
+            startActivity(intent);
+            finish();
         });
 
-        registro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CentroSalud.class);
-                startActivity(intent);
-            }
+        registro.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), CentroSalud.class);
+            startActivity(intent);
         });
     }
 }

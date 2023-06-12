@@ -115,6 +115,20 @@ public class CentroSalud extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaplayer != null && mediaplayer.isPlaying()) {
+            mediaplayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        botonAudio.setEnabled(true);
+    }
+
     private void reproducirAudio() {
         // Desactivar el botón de reproducción
         botonAudio.setEnabled(false);

@@ -2,37 +2,23 @@ package com.example.sanast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MedicacionAdmin extends AppCompatActivity {
 
     ListView listaUsuarios;
-    Button botonRegistrar;
-    EditText campoMedicacion, campoDosis;
     private String eleccionUsuario;
-    private List<String> dataList = new ArrayList<>();
     private static final int REQUEST_ELECCION_USUARIO = 1;
     private Usuario usuario;
     private FirebaseAuth mAuth;
@@ -79,19 +65,16 @@ public class MedicacionAdmin extends AppCompatActivity {
             }
         });
 
-        listaUsuarios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String usuarioSeleccionado = (String) parent.getItemAtPosition(position);
-                eleccionUsuario = usuarioSeleccionado;
+        listaUsuarios.setOnItemClickListener((parent, view, position, id) -> {
+            String usuarioSeleccionado = (String) parent.getItemAtPosition(position);
+            eleccionUsuario = usuarioSeleccionado;
 
-                String userId = obtenerIdUsuario(usuarioSeleccionado);
+            String userId = obtenerIdUsuario(usuarioSeleccionado);
 
-                // Crear un intent para iniciar la actividad de registro
-                Intent intent = new Intent(MedicacionAdmin.this, MedicacionAdmin2.class);
-                intent.putExtra("usuarioMed", userId);
-                startActivityForResult(intent, REQUEST_ELECCION_USUARIO);
-            }
+            // Crear un intent para iniciar la actividad de registro
+            Intent intent = new Intent(MedicacionAdmin.this, MedicacionAdmin2.class);
+            intent.putExtra("usuarioMed", userId);
+            startActivityForResult(intent, REQUEST_ELECCION_USUARIO);
         });
 
         mAuth = FirebaseAuth.getInstance();
@@ -137,7 +120,6 @@ public class MedicacionAdmin extends AppCompatActivity {
     }
 
     private String obtenerIdUsuario(String usuarioSeleccionado) {
-        // Parsear el usuario seleccionado para obtener el ID
         String[] partes = usuarioSeleccionado.split(" - ID: ");
         return partes[1];
     }

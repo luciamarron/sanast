@@ -1,8 +1,6 @@
 package com.example.sanast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -10,16 +8,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -62,21 +55,11 @@ public class Login extends AppCompatActivity {
         });
 
         //BOTON ?
-        botonAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reproducirAudio();
-            }
-        });
+        botonAudio.setOnClickListener(v -> reproducirAudio());
 
 
         //BOTÓN ENTRAR
-        entrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                login(usuario.getText().toString(), contraseña.getText().toString());
-            }
-        });
+        entrar.setOnClickListener(view -> login(usuario.getText().toString(), contraseña.getText().toString()));
     }
 
     @Override
@@ -98,27 +81,24 @@ public class Login extends AppCompatActivity {
             return;
         }
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signInWithEmailAndPassword(correo, contrasena).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    String userEmail = user.getEmail();
-                    if (userEmail.equals("admin@admin.com")) {
-                        // Usuario es administrador, redirigir a la pantalla de medicación
-                        Intent intent = new Intent(Login.this, MedicacionAdmin.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        // Usuario no es administrador, redirigir al menú interno
-                        Intent intent = new Intent(Login.this, MenuInterno.class);
-                        startActivity(intent);
-                        finish();
-                    }
+        mAuth.signInWithEmailAndPassword(correo, contrasena).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                FirebaseUser user = mAuth.getCurrentUser();
+                String userEmail = user.getEmail();
+                if (userEmail.equals("admin@admin.com")) {
+                    // Usuario es administrador, redirigir a la pantalla de medicación
+                    Intent intent = new Intent(Login.this, MedicacionAdmin.class);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    Toast.makeText(Login.this, "USUARIO O CONTRASEÑA INCORRECTOS",
-                            Toast.LENGTH_SHORT).show();
+                    // Usuario no es administrador, redirigir al menú interno
+                    Intent intent = new Intent(Login.this, MenuInterno.class);
+                    startActivity(intent);
+                    finish();
                 }
+            } else {
+                Toast.makeText(Login.this, "USUARIO O CONTRASEÑA INCORRECTOS",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,12 +109,9 @@ public class Login extends AppCompatActivity {
 
         // Iniciar la reproducción del audio
         mediaplayer = MediaPlayer.create(this, R.raw.login);
-        mediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
-                botonAudio.setEnabled(true);
-            }
+        mediaplayer.setOnCompletionListener(mp -> {
+            // Habilitar nuevamente el botón de reproducción cuando el audio termine de reproducirse
+            botonAudio.setEnabled(true);
         });
         mediaplayer.start();
     }

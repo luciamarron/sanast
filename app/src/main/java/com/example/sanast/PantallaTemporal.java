@@ -3,8 +3,6 @@ package com.example.sanast;
 import static com.example.sanast.R.*;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,24 +24,20 @@ public class PantallaTemporal extends AppCompatActivity {
 
         setContentView(R.layout.activity_pantalla_temporal);
 
-        //ANIMATIONS
+        //ANIMACIONES
         Animation animation1 = AnimationUtils.loadAnimation(this, anim.desplazamiento_arriba);
         Animation animation2 = AnimationUtils.loadAnimation(this, anim.desplazamiento_abajo);
 
-        text = (TextView) findViewById(R.id.sanast);
-        logo = (ImageView)findViewById(R.id.logo);
+        text = findViewById(R.id.sanast);
+        logo = findViewById(R.id.logo);
 
         text.setAnimation(animation2);
         logo.setAnimation(animation1);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(PantallaTemporal.this, MenuPrincipal.class);
-                startActivity(intent);
-                finish();
-            }
-
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(PantallaTemporal.this, MenuPrincipal.class);
+            startActivity(intent);
+            finish();
         }, 4000);
     }
 }
