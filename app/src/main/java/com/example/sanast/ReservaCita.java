@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -36,7 +38,7 @@ public class ReservaCita extends AppCompatActivity {
     private FirebaseAuth mAuth;
     TextView nombre;
     CalendarView calendarView;
-    String fechaSeleccionada;
+    String fechaSeleccionada = null;
     FloatingActionButton botonAudio;
     MediaPlayer mediaplayer;
     RadioButton presencial, telefonica;
@@ -80,6 +82,18 @@ public class ReservaCita extends AppCompatActivity {
 
                     // Asigna el nombre del usuario al TextView
                     nombre.setText(nombreUsuario);
+
+                    // Comprobar la longitud del nombre
+                    if (nombreUsuario.length() > 25) {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(false);
+                        nombre.setMaxLines(2);
+                        nombre.setGravity(Gravity.END);
+                    } else {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(true);
+                        nombre.setGravity(Gravity.START);
+                    }
                 }
             }
 
@@ -97,7 +111,19 @@ public class ReservaCita extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 // El mes comienza en 0, por lo que se debe sumar 1 al mes
-                fechaSeleccionada = String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year);
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, dayOfMonth);
+
+                // Obtener la fecha actual
+                Calendar currentDate = Calendar.getInstance();
+
+                // Verificar si la fecha seleccionada es posterior a la fecha actual
+                if (selectedDate.after(currentDate)) {
+                    fechaSeleccionada = String.format(Locale.getDefault(), "%02d/%02d/%04d", dayOfMonth, month + 1, year);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Por favor, seleccione una fecha posterior a hoy", Toast.LENGTH_SHORT).show();
+                    fechaSeleccionada = null;
+                }
             }
         });
 
@@ -107,6 +133,7 @@ public class ReservaCita extends AppCompatActivity {
             public void onClick(View v) {
                 if (fechaSeleccionada == null) {
                     Toast.makeText(getApplicationContext(), "Por favor, seleccione una fecha", Toast.LENGTH_SHORT).show();
+                    return;
                 }else if (!presencial.isChecked() && !telefonica.isChecked()){
                     Toast.makeText(getApplicationContext(), "Por favor, seleccione el tipo de consulta", Toast.LENGTH_SHORT).show();
                 } else {
@@ -148,8 +175,15 @@ public class ReservaCita extends AppCompatActivity {
         long fechaSeleccionadaMillis = calendarView.getDate();
         Date fechaSeleccionada = new Date(fechaSeleccionadaMillis);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        return dateFormat.format(fechaSeleccionada);
+        Date fechaActual = new Date();
+
+        if (fechaSeleccionada.after(fechaActual)) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            return dateFormat.format(fechaSeleccionada);
+        } else {
+            Toast.makeText(getApplicationContext(), "Por favor, seleccione una fecha posterior a hoy", Toast.LENGTH_SHORT).show();
+            return null;
+        }
     }
 
     private String obtenerTipoCitaDelRadioButton() {
@@ -167,7 +201,7 @@ public class ReservaCita extends AppCompatActivity {
 
     private void mostrarDialogoNuevaCita() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("CITA RESERVADA CON ÉXITO \n\n¿Quieres solicitar una nueva cita?")
+        builder.setTitle("CITA RESERVADA CON ÉXITO \n¿Quieres solicitar una nueva cita?")
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

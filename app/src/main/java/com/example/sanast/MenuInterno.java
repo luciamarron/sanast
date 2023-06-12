@@ -1,17 +1,18 @@
 package com.example.sanast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,39 +27,11 @@ import com.google.firebase.database.ValueEventListener;
 public class MenuInterno extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private String eleccionCentroSalud;
-    Button medicacion, prox_cita, cita;
+    Button medicacion, prox_cita, cita, llamarCentroSalud;
     TextView nombre;
     FloatingActionButton botonAudio;
     MediaPlayer mediaplayer;
-
-    //BOTÓN ATRAS
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("¿Desea salir de la aplicación?")
-                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Finalizar la actividad actual y salir de la aplicación
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Cerrar el diálogo y continuar en la actividad actual
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
+    private static final int REQUEST_PHONE_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +88,18 @@ public class MenuInterno extends AppCompatActivity {
 
                     // Asigna el nombre del usuario al TextView
                     nombre.setText(nombreUsuario);
+
+                    // Comprobar la longitud del nombre
+                    if (nombreUsuario.length() > 25) {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(false);
+                        nombre.setMaxLines(2);
+                        nombre.setGravity(Gravity.END);
+                    } else {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(true);
+                        nombre.setGravity(Gravity.START);
+                    }
                 }
             }
 
@@ -135,6 +120,20 @@ public class MenuInterno extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaplayer != null && mediaplayer.isPlaying()) {
+            mediaplayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        botonAudio.setEnabled(true);
+    }
+
     private void reproducirAudio() {
         // Desactivar el botón de reproducción
         botonAudio.setEnabled(false);
@@ -150,4 +149,5 @@ public class MenuInterno extends AppCompatActivity {
         });
         mediaplayer.start();
     }
+
 }

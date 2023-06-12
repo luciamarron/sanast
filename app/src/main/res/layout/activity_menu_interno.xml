@@ -196,7 +196,7 @@
             android:src="@drawable/ayuda" />
 
             <Button
-                android:id="@+id/llamar"
+                android:id="@+id/llamada"
                 android:layout_width="154dp"
                 android:layout_height="54dp"
                 android:backgroundTint="@color/sanast"

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +35,8 @@ public class MedicacionAdmin extends AppCompatActivity {
     private List<String> dataList = new ArrayList<>();
     private static final int REQUEST_ELECCION_USUARIO = 1;
     private Usuario usuario;
+    private FirebaseAuth mAuth;
+    private DatabaseReference medicacionRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +61,11 @@ public class MedicacionAdmin extends AppCompatActivity {
 
                 for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
                     String nombre = usuarioSnapshot.child("nombre").getValue(String.class);
-                    String dni = usuarioSnapshot.child("dni").getValue(String.class);
+                    String userId = usuarioSnapshot.getKey();
 
                     // Verificar si el usuario actual no es el administrador
                     if (!usuarioSnapshot.getKey().equals("admin")) {
-                        String usuarioString = nombre + " - DNI: " + dni;
+                        String usuarioString = nombre + " - ID: " + userId;
                         dataList.add(usuarioString);
                     }
                 }
@@ -72,7 +75,7 @@ public class MedicacionAdmin extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Manejar el error si es necesario
+
             }
         });
 
@@ -81,16 +84,19 @@ public class MedicacionAdmin extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String usuarioSeleccionado = (String) parent.getItemAtPosition(position);
                 eleccionUsuario = usuarioSeleccionado;
-                Toast.makeText(MedicacionAdmin.this, "Se hizo clic en: " + usuarioSeleccionado, Toast.LENGTH_SHORT).show();
 
-                String identificadorAleatorio = UUID.randomUUID().toString();
+                String userId = obtenerIdUsuario(usuarioSeleccionado);
 
                 // Crear un intent para iniciar la actividad de registro
                 Intent intent = new Intent(MedicacionAdmin.this, MedicacionAdmin2.class);
-                intent.putExtra("usuarioMed", identificadorAleatorio);
+                intent.putExtra("usuarioMed", userId);
                 startActivityForResult(intent, REQUEST_ELECCION_USUARIO);
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        medicacionRef = FirebaseDatabase.getInstance().getReference("medicacion");
+
     }
 
     @Override
@@ -101,7 +107,40 @@ public class MedicacionAdmin extends AppCompatActivity {
             String eleccionCentroSalud = data.getStringExtra("usuarioMed");
             // Asignar el valor de eleccionCentroSalud a la instancia de Usuario
             usuario.setCentro_de_salud(eleccionCentroSalud);
+
+            // Obtener el identificador del usuario autenticado
+            if (mAuth.getCurrentUser() != null) {
+                String userId = mAuth.getCurrentUser().getUid();
+                DatabaseReference medicacionRef = FirebaseDatabase.getInstance().getReference("medicacion");
+                DatabaseReference usuarioMedicacionRef = medicacionRef.child(userId);
+
+                usuarioMedicacionRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        List<String> medicacionList = new ArrayList<>();
+                        for (DataSnapshot medicacionSnapshot : dataSnapshot.getChildren()) {
+                            String medicacion = medicacionSnapshot.child("medicacion").getValue(String.class);
+                            String dosis = medicacionSnapshot.child("dosis").getValue(String.class);
+                            String medicacionUsu = medicacion + " - " + dosis;
+                            medicacionList.add(medicacionUsu);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
     }
+
+    private String obtenerIdUsuario(String usuarioSeleccionado) {
+        // Parsear el usuario seleccionado para obtener el ID
+        String[] partes = usuarioSeleccionado.split(" - ID: ");
+        return partes[1];
+    }
+
 
 }

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +29,7 @@ public class Medicacion extends AppCompatActivity {
     private FirebaseAuth mAuth;
     TextView nombre;
     Button volver;
+    ListView listViewCitas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class Medicacion extends AppCompatActivity {
 
         nombre = findViewById(R.id.usuariomenu);
         volver = findViewById(R.id.volver);
+        listViewCitas = findViewById(R.id.listMedicacion);
 
         //RECUPERACIÓN DE NOMBRE DE USUARIO
         mAuth = FirebaseAuth.getInstance();
@@ -55,6 +59,18 @@ public class Medicacion extends AppCompatActivity {
 
                     // Asigna el nombre del usuario al TextView
                     nombre.setText(nombreUsuario);
+
+                    // Comprobar la longitud del nombre
+                    if (nombreUsuario.length() > 25) {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(false);
+                        nombre.setMaxLines(2);
+                        nombre.setGravity(Gravity.END);
+                    } else {
+                        nombre.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        nombre.setSingleLine(true);
+                        nombre.setGravity(Gravity.START);
+                    }
                 }
             }
 
@@ -64,17 +80,14 @@ public class Medicacion extends AppCompatActivity {
             }
         });
 
-        //RECUPERACIÓN DE MEDICACIÓN
-        String userCita = mAuth.getCurrentUser().getUid();
-        DatabaseReference medicacionRef = FirebaseDatabase.getInstance().getReference("medicacion")
-                .child(userCita);
+        // RECUPERACIÓN DE MEDICACIÓN
+        DatabaseReference medicacionRef = FirebaseDatabase.getInstance().getReference("medicacion");
 
-        ListView listViewCitas = findViewById(R.id.listMedicacion);
-
-        medicacionRef.addValueEventListener(new ValueEventListener() {
+        medicacionRef.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> medicacionList = new ArrayList<>();
+
                 for (DataSnapshot medicacionSnapshot : dataSnapshot.getChildren()) {
                     String medicacion = medicacionSnapshot.child("medicacion").getValue(String.class);
                     String dosis = medicacionSnapshot.child("dosis").getValue(String.class);
@@ -92,7 +105,6 @@ public class Medicacion extends AppCompatActivity {
                 // Maneja el error en caso de que ocurra
             }
         });
-
 
         volver.setOnClickListener(new View.OnClickListener() {
             @Override
